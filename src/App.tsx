@@ -623,7 +623,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen text-white font-sans selection:bg-[#6C63FF]/30 overflow-x-hidden flex flex-col">
+    <div className="min-h-screen bg-[#080810] text-white font-sans selection:bg-[#6C63FF]/30 overflow-x-hidden flex flex-col">
       <CustomCursor />
       
       {/* Shared Nav */}
