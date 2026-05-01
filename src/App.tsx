@@ -358,28 +358,28 @@ const ExpertiseDetailPage = ({ type, onBack, onContactClick }: { type: 'ecommerc
   const content = {
     'ecommerce': {
       title: 'E-commerce Solutions',
-      icon: <ShoppingCart size={40} className="text-[#6C63FF]" />,
+      icon: <ShoppingCart size={48} className="text-[#6C63FF]" />,
       desc: 'We engineer high-converting digital storefronts that turn browsers into lifelong customers.',
       full: 'From Shopify optimization to custom headless commerce builds, we focus on the metrics that matter: site speed, conversion rate, and average order value. Our solutions are built to scale with your growth.',
       metrics: ['+45% Conversion Rate', '0.8s Load Times', 'Seamless Scale']
     },
     'webdesign': {
       title: 'Custom Web Design',
-      icon: <Monitor size={40} className="text-[#6C63FF]" />,
+      icon: <Monitor size={48} className="text-[#6C63FF]" />,
       desc: 'Bespoke web experiences that blend aesthetic elegance with technical precision.',
       full: 'We don\'t use templates. Every site is a unique architectural masterpiece designed to reflect your brand\'s DNA. We prioritize accessibility, performance, and distinctive visual storytelling.',
       metrics: ['Unique Branding', 'Mobile Focused', 'WCAG Compliant']
     },
     'uiux': {
       title: 'UI/UX Strategy',
-      icon: <PenTool size={40} className="text-[#6C63FF]" />,
+      icon: <PenTool size={48} className="text-[#6C63FF]" />,
       desc: 'User-centric design systems and strategic interfaces that drive deep engagement.',
       full: 'Great design is invisible. We map user journeys and build design systems that make complex interactions feel effortless. Our approach is data-informed and human-centric.',
       metrics: ['Intuitive Flow', 'Design Systems', 'User Research']
     },
     'seo': {
       title: 'SEO Performance',
-      icon: <BarChart3 size={40} className="text-[#6C63FF]" />,
+      icon: <BarChart3 size={48} className="text-[#6C63FF]" />,
       desc: 'Technical SEO and content strategy to dominate search rankings and sustainable growth.',
       full: 'Visibility is oxygen for business. We go beyond keywords to build technical authority and content ecosystems that rank. We focus on long-term organic growth that reduces your dependence on paid ads.',
       metrics: ['Page 1 Rankings', 'Traffic Velocity', 'Technical Edge']
@@ -391,51 +391,77 @@ const ExpertiseDetailPage = ({ type, onBack, onContactClick }: { type: 'ecommerc
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
       exit={{ opacity: 0 }}
-      className="min-h-screen bg-[#05050A] pt-32 pb-24 px-6"
+      className="min-h-screen bg-[#05050A] pt-32 md:pt-40 lg:pt-48 pb-24 px-6 relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      {/* Background elements */}
+      <div className="absolute top-0 left-[-100px] w-[500px] h-[500px] bg-[#6C63FF]/15 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-[-100px] w-[500px] h-[500px] bg-[#A78BFA]/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
         <button 
           onClick={onBack}
-          className="group flex items-center gap-2 text-[#9090A8] hover:text-white transition-colors mb-12"
+          className="group flex items-center gap-2 text-[#9090A8] hover:text-white transition-colors mb-12 md:mb-16"
         >
           <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-bold uppercase tracking-widest">Back to Studio</span>
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Return to Studio</span>
         </button>
 
-        <div className="mb-12">
-          <div className="mb-6">{content.icon}</div>
-          <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-6 tracking-tight">
-            {content.title.split(' ')[0]} <span className="text-[#6C63FF]">{content.title.split(' ').slice(1).join(' ')}</span>
+        <div className="mb-16 md:mb-24">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-4 bg-white/5 border border-white/10 rounded-2xl inline-flex"
+          >
+            {content.icon}
+          </motion.div>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white mb-8 tracking-tighter leading-[0.95]">
+            {content.title.split(' ')[0]} <br className="hidden md:block" />
+            <span className="text-[#6C63FF]">{content.title.split(' ').slice(1).join(' ')}</span>
           </h1>
-          <p className="text-xl md:text-2xl text-white/50 leading-relaxed font-medium">
+          <p className="text-xl md:text-3xl lg:text-4xl text-white/50 leading-relaxed font-bold max-w-4xl tracking-tight">
             {content.desc}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-          <div className="text-white/70 leading-relaxed space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 mb-24">
+          <div className="lg:col-span-7 text-white/70 leading-relaxed space-y-10 text-lg md:text-xl font-medium">
             <p>{content.full}</p>
-            <p>Our approach combines market psychology with cutting-edge technology to ensure your digital presence isn't just a website, but a business asset.</p>
-          </div>
-          <div className="space-y-4">
-            <h3 className="text-xs uppercase tracking-widest font-black text-[#6C63FF] mb-6">Key Results</h3>
-            {content.metrics.map((m, i) => (
-              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-[#6C63FF]/20 flex items-center justify-center text-[#6C63FF]">
-                  <Check size={14} strokeWidth={3} />
+            <p>Our approach combines market psychology with cutting-edge technology to ensure your digital presence isn't just a website, but a business asset that drives growth and defines your industry standard.</p>
+            
+            <div className="pt-10">
+              <RotatingBorderButton 
+                onClick={onContactClick}
+                className="w-full md:w-auto"
+              >
+                <div className="flex items-center gap-4 px-10 py-2">
+                  <span className="font-black uppercase tracking-[0.2em] text-xs md:text-sm">Start a Project</span>
+                  <ArrowRight size={18} className="group-hover/btn-rotate:translate-x-1 transition-transform" />
                 </div>
-                <span className="font-bold text-white uppercase tracking-wider text-xs md:text-sm">{m}</span>
-              </div>
+              </RotatingBorderButton>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-5 space-y-6">
+            <h3 className="text-xs md:text-sm uppercase tracking-[0.3em] font-black text-[#6C63FF] mb-10 flex items-center gap-3">
+              <span className="w-8 h-[1px] bg-[#6C63FF]" />
+              The Standard
+            </h3>
+            {content.metrics.map((m, i) => (
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white/5 border border-white/10 rounded-3xl p-8 flex items-center gap-6 shadow-xl hover:border-[#6C63FF]/30 transition-all group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#6C63FF]/10 flex items-center justify-center text-[#6C63FF] group-hover:bg-[#6C63FF] group-hover:text-white transition-all duration-500">
+                  <Check size={20} strokeWidth={3} />
+                </div>
+                <span className="font-black text-white uppercase tracking-widest text-sm md:text-base">{m}</span>
+              </motion.div>
             ))}
           </div>
         </div>
-
-        <RotatingBorderButton 
-          onClick={onContactClick}
-          className="w-full md:w-auto"
-        >
-          <span className="px-8 font-black uppercase tracking-widest text-xs">Start a Project</span>
-        </RotatingBorderButton>
       </div>
     </motion.div>
   );
@@ -1003,35 +1029,55 @@ const CaseStudyDetail = ({ caseId, onBack, caseStudies }: {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="bg-[#080810] min-h-screen pt-24 md:pt-40 pb-20"
+      className="bg-[#080810] min-h-screen pt-32 md:pt-48 pb-20 relative overflow-hidden"
     >
-      <div className="container mx-auto px-6 md:px-16">
-        <div className="max-w-6xl mx-auto">
+      {/* Background Decorative */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#6C63FF]/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-[400px] h-[400px] bg-[#A78BFA]/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <div className="container mx-auto px-6 md:px-16 relative z-10">
+        <div className="max-w-[1440px] mx-auto">
+          <button 
+            onClick={onBack}
+            className="group flex items-center gap-2 text-[#9090A8] hover:text-[#6C63FF] transition-all mb-12 md:mb-20"
+          >
+            <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#6C63FF]/50 group-hover:bg-[#6C63FF]/10 transition-all">
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            </div>
+            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Return to Archive</span>
+          </button>
+
           {/* Main Content Area */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-start mb-20 md:mb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-start mb-24 md:mb-32">
             <div>
-              <div className="flex items-center gap-4 mb-6 md:mb-8">
-                <span className="text-[#6C63FF] font-black text-[10px] md:text-xs uppercase tracking-[0.3em]">{study.category}</span>
-                <div className="h-[1px] w-8 md:w-12 bg-[#6C63FF]/30" />
+              <div className="flex items-center gap-6 mb-8 md:mb-12">
+                <span className="text-[#6C63FF] font-black text-xs md:text-sm uppercase tracking-[0.4em] bg-[#6C63FF]/10 px-4 py-2 rounded-full">{study.category}</span>
+                <div className="h-[1px] flex-1 bg-white/10" />
               </div>
               
-              <h1 className="font-display text-[clamp(1.4rem,7vw,4.5rem)] md:text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-[1.2] md:leading-[1.1] tracking-tight mb-8 md:mb-12">
+              <h1 className="font-display text-[clamp(2.5rem,8vw,5.5rem)] lg:text-7xl xl:text-8xl font-black leading-[0.95] tracking-tight mb-12 md:mb-20">
                 {study.title}
               </h1>
 
-              <div className="space-y-12">
+              <div className="space-y-16 lg:space-y-24">
                 <div>
-                  <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#6C63FF] mb-3 md:mb-4">Client Problem</h3>
-                  <p className="text-[#9090A8] text-sm md:text-lg leading-relaxed font-medium">
+                  <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-[#6C63FF] mb-6 flex items-center gap-3">
+                    <span className="w-8 h-[1px] bg-[#6C63FF]" />
+                    The Challenge
+                  </h3>
+                  <p className="text-[#9090A8] text-lg md:text-2xl leading-relaxed font-bold tracking-tight opacity-90">
                     {study.problem}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#6C63FF] mb-3 md:mb-4">Services Provided</h3>
-                  <div className="flex flex-wrap gap-2">
+                  <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-[#6C63FF] mb-6 flex items-center gap-3">
+                    <span className="w-8 h-[1px] bg-[#6C63FF]" />
+                    Scope of Work
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
                     {study.services?.map((service: string, i: number) => (
-                      <span key={i} className="px-3 py-1.5 md:px-4 md:py-2 bg-white/5 border border-white/10 rounded-full text-[10px] md:text-xs font-bold text-white whitespace-nowrap">
+                      <span key={i} className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-xs md:text-sm font-black uppercase tracking-wider text-white hover:border-[#6C63FF]/50 transition-all cursor-default">
                         {service}
                       </span>
                     ))}
@@ -1039,57 +1085,93 @@ const CaseStudyDetail = ({ caseId, onBack, caseStudies }: {
                 </div>
 
                 <div>
-                  <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#6C63FF] mb-3 md:mb-4">The Result</h3>
-                  <div className="p-6 md:p-8 bg-gradient-to-br from-white/5 to-transparent border border-white/10 rounded-2xl md:rounded-3xl">
-                    <div className="text-3xl md:text-5xl font-display font-black text-white mb-2">{study.result.split('.')[0]}</div>
-                    <div className="text-[#9090A8] text-[9px] md:text-sm font-bold uppercase tracking-widest leading-relaxed">
-                      {study.result.split('.').slice(1).join('.')}
+                  <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-[#6C63FF] mb-8 flex items-center gap-3">
+                    <span className="w-8 h-[1px] bg-[#6C63FF]" />
+                    Proven Results
+                  </h3>
+                  <div className="p-10 md:p-14 bg-gradient-to-br from-white/5 via-white/[0.02] to-transparent border border-white/10 rounded-[3rem] shadow-2xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 text-[#6C63FF] opacity-10 group-hover:opacity-20 transition-opacity">
+                      <BarChart3 size={120} />
+                    </div>
+                    <div className="relative z-10">
+                      <div className="text-5xl md:text-7xl xl:text-8xl font-display font-black text-white mb-6 tracking-tighter">{study.result.split('.')[0]}</div>
+                      <div className="text-[#9090A8] text-sm md:text-lg font-bold uppercase tracking-[0.2em] leading-relaxed max-w-md">
+                        {study.result.split('.').slice(1).join('.')}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="relative lg:sticky lg:top-32">
-              <h3 className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-[#6C63FF] mb-4 md:mb-6">Our Solution & Proof</h3>
-              <div className="relative rounded-2xl md:rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl shadow-[#6C63FF]/10 group">
-                <img 
-                  src={study.image} 
-                  alt="Solution Proof"
-                  className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#080810]/40 to-transparent pointer-events-none" />
-                
-                {/* Overlay Label */}
-                <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6 p-3 md:p-4 backdrop-blur-md bg-black/40 border border-white/10 rounded-xl md:rounded-2xl">
-                  <div className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white/50 mb-1">Live Result Screenshot</div>
-                  <div className="text-white text-[10px] md:text-xs font-bold truncate">{study.title} - Final Delivery</div>
+            <div className="relative lg:sticky lg:top-40">
+              <div className="group/solution mb-10">
+                <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-[#6C63FF] mb-8 flex items-center gap-3">
+                  <span className="w-8 h-[1px] bg-[#6C63FF]" />
+                  Visual Evidence
+                </h3>
+                <div className="relative rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden border border-white/10 shadow-2xl shadow-[#6C63FF]/10 bg-white/5">
+                  <img 
+                    src={study.image} 
+                    alt="Solution Proof"
+                    className="w-full h-auto object-cover group-hover/solution:scale-[1.05] transition-transform duration-1000"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+                  
+                  {/* Overlay Label */}
+                  <div className="absolute bottom-8 left-8 right-8 p-6 backdrop-blur-xl bg-black/40 border border-white/10 rounded-3xl">
+                    <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-[#6C63FF] mb-2">Technical Delivery Verification</div>
+                    <div className="text-white text-xs md:text-sm font-black truncate tracking-tight">{study.title} — System Architecture Detail</div>
+                  </div>
                 </div>
               </div>
               
-              <div className="mt-6 md:mt-8 space-y-4 md:space-y-6">
-                <div className="text-[#9090A8] text-sm md:text-lg leading-relaxed italic">
+              <div className="mt-12 space-y-10">
+                <div className="text-[#9090A8] text-xl md:text-3xl leading-tight font-bold tracking-tight italic opacity-80 border-l-4 border-[#6C63FF] pl-8 py-2">
                   "{study.content}"
                 </div>
-                <div className="h-[1px] w-full bg-white/5" />
-                <p className="text-[#9090A8] text-[10px] md:text-sm leading-relaxed">
+                <div className="h-[1px] w-full bg-white/10" />
+                <p className="text-[#9090A8] text-base md:text-lg leading-relaxed font-medium">
                   {study.solution}
                 </p>
+                
+                <div className="pt-8">
+                  <RotatingBorderButton 
+                    onClick={() => {
+                      onBack();
+                      setTimeout(() => {
+                        setCurrentView('home');
+                        setTimeout(() => {
+                          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
+                      }, 100);
+                    }}
+                    className="w-full"
+                  >
+                    <div className="flex items-center justify-center gap-4 py-4">
+                      <span className="font-black uppercase tracking-[0.3em] text-sm">Need Similar Results?</span>
+                      <ArrowRight size={20} className="group-hover/btn-rotate:translate-x-2 transition-transform" />
+                    </div>
+                  </RotatingBorderButton>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Back to Archive at Bottom */}
-        <div className="max-w-6xl mx-auto flex justify-center mt-20 pt-10 border-t border-white/5">
+        <div className="max-w-[1440px] mx-auto flex justify-center mt-32 pt-16 border-t border-white/5">
           <RotatingBorderButton 
             onClick={onBack}
-            className="hover:scale-105 active:scale-95 shadow-2xl"
+            className="group"
           >
-            <div className="flex items-center gap-3 px-4 py-1 text-white">
-              <ArrowRight className="rotate-180 group-hover/btn-rotate:-translate-x-1 transition-transform text-[#6C63FF]" size={18} />
-              <span className="font-black text-[10px] md:text-xs tracking-[0.4em] uppercase">Explore Archive</span>
+            <div className="flex items-center gap-6 px-12 py-3 text-white">
+              <ArrowLeft className="group-hover/btn-rotate:-translate-x-2 transition-transform text-[#6C63FF]" size={24} />
+              <div className="flex flex-col items-start">
+                <span className="font-black text-[10px] md:text-xs tracking-[0.5em] uppercase mb-1">Previous Experience</span>
+                <span className="font-bold text-xs md:text-sm opacity-50">Back to Hub</span>
+              </div>
             </div>
           </RotatingBorderButton>
         </div>
@@ -1100,65 +1182,86 @@ const CaseStudyDetail = ({ caseId, onBack, caseStudies }: {
 
 // Extracted Footer Component
 const Footer = ({ onPageClick }: { onPageClick: (view: any) => void }) => (
-  <footer className="bg-black/40 pt-12 pb-8 px-6 md:px-16 border-t border-white/5 w-full">
-    <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 mb-12">
-        <div className="col-span-2 md:col-span-2">
-          <div className="font-display font-medium text-xl mb-4">
+  <footer className="bg-black/40 pt-16 pb-12 px-6 md:px-16 border-t border-white/5 w-full relative overflow-hidden">
+    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1200px] h-[300px] bg-[#6C63FF]/5 blur-[120px] rounded-full pointer-events-none" />
+    
+    <div className="max-w-[1440px] mx-auto relative z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-24 mb-16 px-4">
+        <div className="lg:col-span-1">
+          <div className="font-display font-black text-2xl mb-6 tracking-tight">
             ZYVREL <span className="text-[#6C63FF]">DIGITAL</span>
           </div>
-          <p className="text-white/50 text-xs max-w-[280px] mb-6 leading-relaxed">
-            Crafting high-end digital experiences that convert. 
-            E-commerce & Custom Development Experts.
+          <p className="text-[#9090A8] text-sm md:text-base max-w-sm mb-8 leading-relaxed font-medium opacity-80">
+            Crafting iconic digital experiences that define markets. 
+            Elite E-commerce & Web Architecture Studio.
           </p>
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             {[Linkedin, Twitter, Instagram, Facebook].map((Icon, i) => (
               <a 
                 key={i} 
                 href="#" 
-                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:border-[#6C63FF] hover:bg-[#6C63FF]/10 transition-all text-white/70 hover:text-white"
+                className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 hover:border-[#6C63FF] hover:bg-[#6C63FF]/10 transition-all text-white/70 hover:text-white shadow-lg"
               >
-                <Icon size={14} />
+                <Icon size={18} />
               </a>
             ))}
           </div>
         </div>
-        <div>
-          <h4 className="text-[11px] uppercase tracking-widest font-black text-white/90 mb-4">Expertise</h4>
-          <ul className="space-y-3 text-white/50 text-[11px] font-medium">
-            <li onClick={() => onPageClick('ecommerce')} className="hover:text-white transition-colors cursor-pointer">E-commerce Solutions</li>
-            <li onClick={() => onPageClick('webdesign')} className="hover:text-white transition-colors cursor-pointer">Custom Web Design</li>
-            <li onClick={() => onPageClick('uiux')} className="hover:text-white transition-colors cursor-pointer">UI/UX Strategy</li>
-            <li onClick={() => onPageClick('seo')} className="hover:text-white transition-colors cursor-pointer">SEO Performance</li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="text-[11px] uppercase tracking-widest font-black text-white/90 mb-4">Company</h4>
-          <ul className="space-y-3 text-white/50 text-[11px] font-medium">
-            <li onClick={() => onPageClick('problems')} className="hover:text-white transition-colors cursor-pointer">Our Work</li>
-            <li onClick={() => onPageClick('problems')} className="hover:text-white transition-colors cursor-pointer">Case Studies</li>
-            <li onClick={() => onPageClick('contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</li>
-            <li 
-              onClick={() => onPageClick('privacy')}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
-              Privacy Policy
-            </li>
-          </ul>
+        
+        <div className="grid grid-cols-2 lg:col-span-3 gap-8 md:gap-16">
+          <div>
+            <h4 className="text-xs md:text-sm uppercase tracking-[0.4em] font-black text-[#6C63FF] mb-8">Expertise</h4>
+            <ul className="space-y-4 text-[#9090A8] text-xs md:text-base font-bold">
+              <li onClick={() => onPageClick('ecommerce')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                E-commerce Solutions
+              </li>
+              <li onClick={() => onPageClick('webdesign')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                Custom Web Design
+              </li>
+              <li onClick={() => onPageClick('uiux')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                UI/UX Strategy
+              </li>
+              <li onClick={() => onPageClick('seo')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                SEO Performance
+              </li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-xs md:text-sm uppercase tracking-[0.4em] font-black text-[#6C63FF] mb-8">Studio</h4>
+            <ul className="space-y-4 text-[#9090A8] text-xs md:text-base font-bold">
+              <li onClick={() => onPageClick('problems')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                Case Studies
+              </li>
+              <li onClick={() => onPageClick('contact')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                Contact Us
+              </li>
+              <li onClick={() => onPageClick('blog')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                Articles
+              </li>
+              <li onClick={() => onPageClick('privacy')} className="hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                Legal Hub
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-white/5 gap-4">
-        <div className="text-white/40 text-[10px] font-medium tracking-tight">
-          © {new Date().getFullYear()} Zyvrel Digital. Crafting with precision.
+      
+      <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-6">
+        <div className="text-[#9090A8] text-[10px] md:text-xs font-black uppercase tracking-[0.3em] opacity-50">
+          © {new Date().getFullYear()} Zyvrel Digital — All System Active
         </div>
-        <div className="flex gap-6 text-white/40 text-[10px] font-medium">
-          <button onClick={() => onPageClick('terms')} className="hover:text-white transition-all underline decoration-white/0 hover:decoration-white/20">Terms</button>
-          <button 
-            onClick={() => onPageClick('privacy')}
-            className="hover:text-white transition-all underline decoration-white/0 hover:decoration-white/20"
-          >
-            Privacy
-          </button>
+        <div className="flex gap-8 text-[#9090A8] text-[10px] md:text-xs font-black uppercase tracking-[0.3em]">
+          <button onClick={() => onPageClick('terms')} className="hover:text-white transition-all hover:tracking-[0.4em]">Terms</button>
+          <button onClick={() => onPageClick('privacy')} className="hover:text-white transition-all hover:tracking-[0.4em]">Privacy</button>
         </div>
       </div>
     </div>
@@ -1444,7 +1547,8 @@ export default function App() {
     const handleResize = () => {
       if (window.innerWidth < 768) setVisibleVideos(1);
       else if (window.innerWidth < 1280) setVisibleVideos(2);
-      else setVisibleVideos(3);
+      else if (window.innerWidth < 1536) setVisibleVideos(3);
+      else setVisibleVideos(4);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -1613,7 +1717,7 @@ export default function App() {
             />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 md:pt-32 pb-12 px-6 md:px-16 overflow-hidden">
+      <section className="relative min-h-[90vh] lg:min-h-screen flex flex-col items-center justify-center pt-24 md:pt-32 xl:pt-40 pb-12 px-6 md:px-16 overflow-hidden">
         {/* Orbs background */}
         <div className="absolute top-0 left-[-100px] w-[500px] h-[500px] bg-[#6C63FF]/15 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute top-0 right-[-50px] w-[400px] h-[400px] bg-[#A78BFA]/10 blur-[100px] rounded-full pointer-events-none" />
@@ -1622,11 +1726,11 @@ export default function App() {
         <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" 
           style={{ 
             backgroundImage: 'linear-gradient(#6C63FF 1px, transparent 1px), linear-gradient(90deg, #6C63FF 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
+            backgroundSize: '80px 80px'
           }} 
         />
 
-        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center z-1">
+        <div className="max-w-7xl 2xl:max-w-[1440px] w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-center z-1">
           {/* Left: Content */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -1653,29 +1757,31 @@ export default function App() {
               </div>
             </div>
             
-            <h1 className="font-display text-[clamp(2.2rem,9.5vw,4.5rem)] md:text-[clamp(3.5rem,7vw,5.5rem)] font-black leading-[1.1] md:leading-[1.0] tracking-tight mb-6 md:mb-8 text-white">
+            <h1 className="font-display text-[clamp(2.2rem,9.5vw,4.5rem)] md:text-[clamp(3.5rem,7vw,5.5rem)] 2xl:text-[6.5rem] font-black leading-[1.1] md:leading-[1.0] lg:leading-[0.95] tracking-tight mb-6 md:mb-8 text-white">
               <span className="whitespace-nowrap">Transform Your</span> <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6C63FF] via-[#A78BFA] to-white bg-[length:200%_auto] animate-gradient-flow">
                 Digital Future.
               </span>
             </h1>
-            <p className="text-[#9090A8] text-base md:text-xl leading-relaxed max-w-2xl mb-8 md:mb-12">
+            <p className="text-[#9090A8] text-base md:text-lg 2xl:text-xl leading-relaxed max-w-2xl mb-8 md:mb-12 font-medium">
               Whether it's a high-converting <span className="text-white font-semibold">Shopify store</span>, a <span className="text-white font-semibold">Custom-coded portal</span>, or any CMS like <span className="text-white font-semibold">WordPress, Framer, or Webflow</span>—we empower any online business with world-class engineering and iconic architecture.
             </p>
             
-            <div className="space-y-4 mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mb-10 xl:mb-14">
               {[
-                "Custom Code & Full-stack Architecture",
-                "Any CMS (WordPress, Wix, Squarespace, Kajabi)",
-                "Shopify Design & Automation",
-                "Framer & Webflow Visual Engineering"
+                "Custom Code & Architecture",
+                "Any CMS Solution",
+                "Shopify Mastery",
+                "Framer & Webflow Visuals",
+                "Full-stack Web Apps",
+                "Performance Marketing"
               ].map((text, i) => (
                 <motion.div 
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * i }}
-                  className="flex items-center gap-3 text-sm font-medium"
+                  transition={{ delay: 0.05 * i }}
+                  className="flex items-center gap-3 text-[12px] 2xl:text-[14px] font-bold text-white/70 uppercase tracking-wider"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-[#6C63FF]" />
                   {text}
@@ -1685,15 +1791,15 @@ export default function App() {
 
             <div className="grid grid-cols-3 gap-2 md:flex md:flex-wrap md:gap-12 pt-4">
               <div>
-                <div className="font-display text-3xl md:text-4xl font-bold">50<span className="text-[#6C63FF]">+</span></div>
+                <div className="font-display text-3xl md:text-4xl xl:text-5xl font-bold">50<span className="text-[#6C63FF]">+</span></div>
                 <div className="text-[9px] md:text-[10px] uppercase tracking-widest text-[#9090A8] mt-1 font-bold whitespace-nowrap">Projects Done</div>
               </div>
               <div>
-                <div className="font-display text-3xl md:text-4xl font-bold">98<span className="text-[#6C63FF]">%</span></div>
+                <div className="font-display text-3xl md:text-4xl xl:text-5xl font-bold">98<span className="text-[#6C63FF]">%</span></div>
                 <div className="text-[9px] md:text-[10px] uppercase tracking-widest text-[#9090A8] mt-1 font-bold whitespace-nowrap">Client Support</div>
               </div>
               <div>
-                <div className="font-display text-3xl md:text-4xl font-bold">3<span className="text-[#6C63FF]">x</span></div>
+                <div className="font-display text-3xl md:text-4xl xl:text-5xl font-bold">3<span className="text-[#6C63FF]">x</span></div>
                 <div className="text-[9px] md:text-[10px] uppercase tracking-widest text-[#9090A8] mt-1 font-bold whitespace-nowrap">Conversion Ease</div>
               </div>
             </div>
@@ -1704,10 +1810,10 @@ export default function App() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-xl mx-auto lg:mx-0"
+            className="relative w-full max-w-xl mx-auto lg:mx-0 2xl:scale-110"
           >
             <RotatingBorderContainer>
-              <div className="p-8 md:p-10 h-full flex flex-col">
+              <div className="p-8 md:p-10 xl:p-12 h-full flex flex-col">
                 <AnimatePresence mode="wait">
                   {formState === 'idle' ? (
                     <motion.div 
@@ -1717,25 +1823,25 @@ export default function App() {
                       exit={{ opacity: 0 }}
                       className="flex-1 flex flex-col"
                     >
-                      <h3 className="font-display text-xl md:text-2xl font-bold mb-2">Is Your Website Losing Clients?</h3>
-                      <p className="text-[#9090A8] text-xs md:text-sm mb-6 md:mb-8">Tell us your problem — we'll tell you how to fix it.</p>
+                      <h3 className="font-display text-xl md:text-2xl xl:text-3xl font-black mb-2">Is Your Website Losing Clients?</h3>
+                      <p className="text-[#9090A8] text-xs md:text-sm xl:text-base mb-6 md:mb-8">Tell us your problem — we'll tell you how to fix it.</p>
                       
-                      <form onSubmit={handleSubmit} className="space-y-4">
+                      <form onSubmit={handleSubmit} className="space-y-4 xl:space-y-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
                             <label className="text-[10px] uppercase tracking-wider font-bold text-[#9090A8]">Name *</label>
-                            <input required type="text" placeholder="John" className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" />
+                            <input required type="text" placeholder="John" className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 xl:py-4 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" />
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-[10px] uppercase tracking-wider font-bold text-[#9090A8]">Email *</label>
-                            <input required type="email" placeholder="john@company.com" className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" />
+                            <input required type="email" placeholder="john@company.com" className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 xl:py-4 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
                             <label className="text-[10px] uppercase tracking-wider font-bold text-[#9090A8]">Website URL</label>
-                            <input type="text" placeholder="yourwebsite.com" className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" />
+                            <input type="text" placeholder="yourwebsite.com" className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 xl:py-4 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" />
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-[10px] uppercase tracking-wider font-bold text-[#9090A8]">Phone Number *</label>
@@ -1746,7 +1852,7 @@ export default function App() {
                               onInput={(e) => {
                                 e.currentTarget.value = e.currentTarget.value.replace(/[^\d+ ]/g, '');
                               }}
-                              className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" 
+                              className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 xl:py-4 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all" 
                             />
                           </div>
                         </div>
@@ -1758,7 +1864,7 @@ export default function App() {
                               required 
                               value={mainProblem}
                               onChange={(e) => setMainProblem(e.target.value)}
-                              className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all z-20"
+                              className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 xl:py-4 text-sm text-white outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all z-20"
                             >
                               <option value="" disabled className="bg-[#080810] text-[#9090A8]">Select your main challenge</option>
                               <option value="outdated" className="bg-[#080810] text-white">My website looks outdated</option>
@@ -1772,13 +1878,13 @@ export default function App() {
 
                         <div className="space-y-3 pt-2">
                           <label className="text-[10px] uppercase tracking-wider font-bold text-[#9090A8]">Services Needed</label>
-                          <div className="grid grid-cols-2 gap-2">
+                          <div className="grid grid-cols-2 gap-2 xl:gap-3">
                             {services.map((service) => (
                               <button
                                 key={service.title}
                                 type="button"
                                 onClick={() => handleSelectService(service.title)}
-                                className={`flex items-center gap-2 px-2 sm:px-3 py-2 rounded-lg border text-[9px] sm:text-[11px] font-semibold transition-all whitespace-nowrap ${
+                                className={`flex items-center gap-2 px-2 sm:px-3 py-2 xl:py-3 rounded-lg border text-[9px] sm:text-[11px] xl:text-[12px] font-bold transition-all whitespace-nowrap ${
                                   selectedService === service.title
                                     ? 'bg-[#6C63FF]/20 border-[#6C63FF] text-white shadow-lg shadow-[#6C63FF]/10'
                                     : 'bg-white/5 border-[#6C63FF]/10 text-white hover:border-[#6C63FF]/50'
@@ -1792,13 +1898,13 @@ export default function App() {
                           </div>
                         </div>
 
-                        <RotatingBorderButton className="w-full mt-4" type="submit">
-                          <span className="font-display font-bold py-1 text-white">Receive My Free Audit</span>
+                        <RotatingBorderButton className="w-full mt-4 xl:mt-8" type="submit">
+                          <span className="font-display font-black py-1 xl:py-2 text-white uppercase tracking-widest text-xs">Receive My Free Audit</span>
                           <ArrowRight size={18} className="group-hover/btn-rotate:translate-x-1 transition-transform text-white" />
                         </RotatingBorderButton>
                         
-                        <p className="text-center text-[10px] text-[#9090A8] opacity-60">
-                          🔒 100% free & confidential · No spam ever
+                        <p className="text-center text-[10px] xl:text-[11px] text-[#9090A8] opacity-60 font-bold uppercase tracking-widest pt-2">
+                          🔒 100% free · Confidential · No spam
                         </p>
                       </form>
                     </motion.div>
@@ -1855,23 +1961,23 @@ export default function App() {
       </section>
 
       {/* Pain Points Section */}
-      <section className="py-24 md:py-40 px-6 md:px-16 relative overflow-hidden">
+      <section className="py-24 md:py-40 xl:py-56 px-6 md:px-16 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#6C63FF]/5 blur-[150px] rounded-full pointer-events-none" />
         
-        <div className="max-w-5xl mx-auto text-center relative z-1">
+        <div className="max-w-7xl mx-auto text-center relative z-1">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             <span className="text-[#6C63FF] font-black text-[10px] md:text-xs uppercase tracking-[0.3em] mb-4 block">Sound Familiar?</span>
-            <h2 className="font-display text-[clamp(2rem,6vw,3.5rem)] font-extrabold mb-20 leading-[1.1]">
+            <h2 className="font-display text-[clamp(2rem,6vw,3.5rem)] xl:text-6xl 2xl:text-7xl font-black mb-20 leading-[1.1] tracking-tight">
               Critical problems we <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6C63FF] to-[#A78BFA]">solve every day</span>
             </h2>
           </motion.div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8 max-w-5xl xl:max-w-none mx-auto">
             {[
               { 
                 emoji: "😫", 
@@ -1889,13 +1995,13 @@ export default function App() {
                 emoji: "🛒", 
                 title: "The Conversion Gap", 
                 desc: "Thousands of visitors, zero sales. Your checkout flow or landing page is leaking money every single minute.",
-                fix: "Data-Driven Conversion Optimization"
+                fix: "Data-Driven Optimization"
               },
               { 
                 emoji: "🤖", 
                 title: "Manual Overhead", 
                 desc: "Spending hours on tasks that could be automated. Your team is bogged down by processes rather than growth.",
-                fix: "Workflow & AI Automation"
+                fix: "AI & Workflow automation"
               },
               { 
                 emoji: "🎭", 
@@ -1907,7 +2013,7 @@ export default function App() {
                 emoji: "💸", 
                 title: "Wasted Ad Spend", 
                 desc: "Running ads that lead to broken links or poor landing pages. You're essentially burning your marketing budget.",
-                fix: "High-ROI Performance Marketing"
+                fix: "High-ROI Ads Strategy"
               },
             ].map((p, i) => (
               <motion.div 
@@ -1919,20 +2025,20 @@ export default function App() {
                 className="group relative"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-[#6C63FF]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl -z-1" />
-                <div className="bg-[#0A0A15] border border-white/5 rounded-2xl p-5 md:p-6 text-left hover:border-[#6C63FF]/40 transition-all h-full flex flex-col shadow-xl">
-                  <h3 className="font-display text-base md:text-lg font-bold mb-2 text-white group-hover:text-[#6C63FF] transition-colors">{p.title}</h3>
-                  <p className="text-[#9090A8] text-[11px] md:text-xs leading-relaxed mb-4 flex-1 italic opacity-70">
+                <div className="bg-[#0A0A15] border border-white/5 rounded-3xl p-6 xl:p-8 text-left hover:border-[#6C63FF]/40 transition-all h-full flex flex-col shadow-xl">
+                  <h3 className="font-display text-base md:text-lg xl:text-xl font-bold mb-3 text-white group-hover:text-[#6C63FF] transition-colors tracking-tight">{p.title}</h3>
+                  <p className="text-[#9090A8] text-[11px] md:text-sm leading-relaxed mb-6 flex-1 opacity-70 font-medium">
                     "{p.desc}"
                   </p>
                   <div 
                     onClick={() => handleOpenCase('web-app-redesign')}
-                    className="pt-4 border-t border-white/5 flex items-center justify-between group/fix cursor-pointer hover:bg-white/[0.02] rounded-xl transition-all"
+                    className="pt-6 border-t border-white/5 flex items-center justify-between group/fix cursor-pointer hover:bg-white/[0.02] rounded-xl transition-all"
                   >
-                    <span className="text-[9px] font-black uppercase tracking-widest text-[#6C63FF]">{p.fix}</span>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#6C63FF]">{p.fix}</span>
                     <div 
-                      className="w-8 h-8 rounded-full bg-[#6C63FF]/10 flex items-center justify-center text-[#6C63FF] group-hover/fix:bg-[#6C63FF] group-hover/fix:text-white transition-all shadow-lg shadow-[#6C63FF]/10"
+                      className="w-10 h-10 rounded-full bg-[#6C63FF]/10 flex items-center justify-center text-[#6C63FF] group-hover/fix:bg-[#6C63FF] group-hover/fix:text-white transition-all shadow-lg shadow-[#6C63FF]/10"
                     >
-                      <ArrowRight size={14} />
+                      <ArrowRight size={16} />
                     </div>
                   </div>
                 </div>
@@ -1965,91 +2071,90 @@ export default function App() {
       </section>
 
       {/* Services Grid */}
-      <section id="services" className="py-10 md:py-24 px-6 md:px-16 container mx-auto">
-        <div className="mb-6 md:mb-20 text-center md:text-left">
-          <span className="text-[#6C63FF] font-bold text-xs uppercase tracking-widest">Our Expertise</span>
-          <h2 className="font-display text-3xl md:text-5xl font-bold mt-4 leading-tight">Everything you need <br className="hidden md:block" /> to win your market</h2>
-        </div>
+      <section id="services" className="py-24 md:py-40 xl:py-56 px-6 md:px-16 container mx-auto 2xl:max-w-none">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="mb-12 md:mb-20 text-center md:text-left">
+            <span className="text-[#6C63FF] font-bold text-xs md:text-sm uppercase tracking-widest bg-[#6C63FF]/10 px-4 py-2 rounded-full">Our Expertise</span>
+            <h2 className="font-display text-4xl md:text-5xl xl:text-7xl font-black mt-8 leading-[1.05] tracking-tight">Everything you need <br className="hidden md:block" /> to win your market</h2>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            { 
-              title: "Web Design & Dev", 
-              desc: "From WordPress to custom-coded React apps. We build fast, secure websites that look amazing.",
-              icon: <Globe size={24} />,
-              tag: "React · Next.js · WP"
-            },
-            { 
-              title: "Shopify Mastery", 
-              desc: "We build Shopify stores optimized for pure conversion. Every pixel is placed to make sales.",
-              icon: <ShoppingCart size={24} />,
-              tag: "D2C · eCommerce"
-            },
-            { 
-              title: "UI/UX Design", 
-              desc: "Research-driven design. We create interfaces that users love to click and interact with.",
-              icon: <Layout size={24} />,
-              tag: "Figma · Prototyping"
-            },
-            { 
-              title: "Graphic Design", 
-              desc: "High-impact visual identity. Logos, branding, and social assets that define your presence.",
-              icon: <PenTool size={24} />,
-              tag: "Branding · Assets"
-            },
-            { 
-              title: "SEO Strategy", 
-              desc: "Rank where it matters. We drive organic traffic that actually translates into ROI.",
-              icon: <BarChart3 size={24} />,
-              tag: "Rankings · Traffic"
-            },
-            { 
-              title: "Digital Marketing", 
-              desc: "Full-funnel marketing. We reach your customers exactly where they hang out online.",
-              icon: <Target size={24} />,
-              tag: "Ads · Social · LeadGen"
-            },
-          ].map((s, i) => (
-            <motion.div 
-              key={i}
-              onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
-                e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
-              }}
-              whileHover={{ y: -10 }}
-              className="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-[#6C63FF]/40 transition-all hover:bg-white/[0.07] group relative overflow-hidden"
-            >
-              <div className="w-12 h-12 bg-[#6C63FF]/10 rounded-2xl flex items-center justify-center text-[#6C63FF] mb-6 group-hover:bg-[#6C63FF] group-hover:text-white transition-all duration-300">
-                {s.icon}
-              </div>
-              <h3 className="font-display text-xl font-bold mb-4 group-hover:text-white transition-colors">{s.title}</h3>
-              <p className="text-[#9090A8] text-sm leading-relaxed mb-8">{s.desc}</p>
-              <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-4">
-                <RotatingBorderButton 
-                  onClick={() => {
-                    setActiveServicePricing(s.title);
-                  }}
-                  className="w-full sm:w-auto"
-                >
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white">View Plans</span>
-                  <ArrowRight size={12} className="text-white group-hover/btn-rotate:translate-x-1 transition-transform" />
-                </RotatingBorderButton>
-                <RotatingBorderButton 
-                  onClick={() => {
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="w-full sm:w-auto"
-                >
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white group-hover/btn-rotate:opacity-80 transition-all py-1">
-                    Ask Question
-                  </span>
-                </RotatingBorderButton>
-              </div>
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 md:gap-8">
+            {[
+              { 
+                title: "Web Design & Dev", 
+                desc: "From WordPress to custom-coded React apps. We build fast, secure websites that look amazing.",
+                icon: <Globe size={24} />,
+                tag: "React · Next.js · WP"
+              },
+              { 
+                title: "Shopify Mastery", 
+                desc: "We build Shopify stores optimized for pure conversion. Every pixel is placed to make sales.",
+                icon: <ShoppingCart size={24} />,
+                tag: "D2C · eCommerce"
+              },
+              { 
+                title: "UI/UX Design", 
+                desc: "Research-driven design. We create interfaces that users love to click and interact with.",
+                icon: <Layout size={24} />,
+                tag: "Figma · Prototyping"
+              },
+              { 
+                title: "Graphic Design", 
+                desc: "High-impact visual identity. Logos, branding, and social assets that define your presence.",
+                icon: <PenTool size={24} />,
+                tag: "Branding · Assets"
+              },
+              { 
+                title: "SEO Strategy", 
+                desc: "Rank where it matters. We drive organic traffic that actually translates into ROI.",
+                icon: <BarChart3 size={24} />,
+                tag: "Rankings · Traffic"
+              },
+              { 
+                title: "Digital Marketing", 
+                desc: "Full-funnel marketing. We reach your customers exactly where they hang out online.",
+                icon: <Target size={24} />,
+                tag: "Ads · Social · LeadGen"
+              },
+            ].map((s, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ y: -10 }}
+                className="bg-white/5 border border-white/10 p-8 xl:p-10 rounded-[2.5rem] hover:border-[#6C63FF]/40 transition-all hover:bg-white/[0.07] group relative overflow-hidden flex flex-col h-full shadow-2xl"
+              >
+                <div className="w-14 h-14 bg-[#6C63FF]/10 rounded-2xl flex items-center justify-center text-[#6C63FF] mb-8 group-hover:bg-[#6C63FF] group-hover:text-white transition-all duration-500 shadow-xl shadow-[#6C63FF]/10">
+                  {s.icon}
+                </div>
+                <h3 className="font-display text-xl xl:text-2xl font-black mb-4 group-hover:text-white transition-colors tracking-tight">{s.title}</h3>
+                <p className="text-[#9090A8] text-sm xl:text-base leading-relaxed mb-10 flex-grow font-medium opacity-80">{s.desc}</p>
+                <div className="flex flex-col sm:flex-row items-stretch xl:items-center gap-4 mt-auto pt-6 border-t border-white/5">
+                  <div className="flex-1">
+                    <RotatingBorderButton 
+                      onClick={() => {
+                        setActiveServicePricing(s.title);
+                      }}
+                      className="w-full"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white py-1">View Plans</span>
+                      <ArrowRight size={12} className="text-white group-hover/btn-rotate:translate-x-1 transition-transform" />
+                    </RotatingBorderButton>
+                  </div>
+                  <div className="flex-1">
+                    <RotatingBorderButton 
+                      onClick={() => {
+                        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="w-full"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white py-1">
+                        Ask Question
+                      </span>
+                    </RotatingBorderButton>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -2183,26 +2288,26 @@ export default function App() {
       </AnimatePresence>
 
       {/* Goal / Evolution Section */}
-      <section id="philosophy" className="pt-10 pb-6 md:pt-56 md:pb-32 px-6 md:px-16 container mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <section id="philosophy" className="pt-24 pb-12 md:pt-48 md:pb-24 xl:pt-56 xl:pb-32 px-6 md:px-16 container mx-auto overflow-hidden 2xl:max-w-none">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             className="z-10"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6C63FF]/10 border border-[#6C63FF]/20 text-[#6C63FF] font-bold text-[10px] uppercase tracking-widest mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6C63FF]/10 border border-[#6C63FF]/20 text-[#6C63FF] font-black text-[10px] md:text-xs uppercase tracking-widest mb-8">
               <span className="w-1.5 h-1.5 rounded-full bg-[#6C63FF] animate-pulse" />
               Complete Digital Partner
             </div>
-            <h2 className="font-display text-[clamp(2.2rem,8vw,3.5rem)] md:text-[clamp(3.5rem,9vw,6rem)] lg:text-7xl font-black leading-[1.0] tracking-tighter">
+            <h2 className="font-display text-[clamp(2.5rem,8vw,4rem)] md:text-[clamp(3.5rem,9vw,6rem)] 2xl:text-8xl font-black leading-[0.95] tracking-tighter">
               <span className="whitespace-nowrap">Growth systems for</span> <br /> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6C63FF] via-[#A78BFA] to-white">Any Tech Stack</span>
             </h2>
-            <p className="text-[#9090A8] mt-10 text-lg md:text-2xl leading-relaxed max-w-2xl">
-              From hand-coded React applications to seamless CMS migrations. We handle the tech so you can focus on the business.
+            <p className="text-[#9090A8] mt-8 md:mt-12 text-lg md:text-2xl leading-relaxed max-w-2xl font-medium">
+              From hand-coded React applications to seamless CMS migrations. We handle the technical complexity so you can focus on scaling your business.
             </p>
             
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 xl:gap-8">
               {[
                 { title: "Web Design & Dev", desc: "From WordPress to custom-coded React apps. We build fast, secure websites." },
                 { title: "Shopify Mastery", desc: "High-converting Shopify stores designed for maximum sales and automation." },
@@ -2211,15 +2316,15 @@ export default function App() {
                 { title: "SEO Strategy", desc: "Rank where it matters. We drive organic traffic that actually translates into ROI." },
                 { title: "Digital Marketing", desc: "Full-funnel marketing. We reach your customers exactly where they are online." },
               ].map((item, i) => (
-                <div key={i} className="group p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-[#6C63FF]/30 transition-all">
-                  <h4 className="font-bold mb-2 text-sm group-hover:text-[#6C63FF] transition-colors">{item.title}</h4>
-                  <p className="text-[11px] md:text-xs text-[#9090A8] leading-relaxed">{item.desc}</p>
+                <div key={i} className="group p-6 xl:p-8 rounded-[2rem] bg-white/[0.03] border border-white/5 hover:border-[#6C63FF]/30 transition-all shadow-xl">
+                  <h4 className="font-black mb-3 text-sm xl:text-base group-hover:text-[#6C63FF] transition-colors uppercase tracking-widest">{item.title}</h4>
+                  <p className="text-xs xl:text-sm text-[#9090A8] leading-relaxed font-medium opacity-80">{item.desc}</p>
                 </div>
               ))}
             </div>
           </motion.div>
           
-          <div className="relative h-[450px] md:h-[750px] mt-10 md:mt-12 flex items-center justify-center">
+          <div className="relative h-[500px] md:h-[700px] xl:h-[800px] 2xl:h-[900px] mt-10 md:mt-0 flex items-center justify-center scale-90 md:scale-100 xl:scale-110">
             {/* Background Glow */}
             <div className="absolute w-[400px] h-[400px] bg-[#6C63FF]/10 rounded-full blur-[100px]" />
             
@@ -2434,20 +2539,20 @@ export default function App() {
       </section>
 
       {/* FAQ & Contact Combined Section */}
-      <section id="contact" className="py-24 md:py-40 px-6 md:px-16 container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <section id="contact" className="py-24 md:py-40 xl:py-56 px-6 md:px-16 container mx-auto 2xl:max-w-none">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 xl:gap-24 items-start">
           
           {/* Left Side: FAQ */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-10 xl:space-y-14">
             <div className="text-center lg:text-left">
-              <span className="text-[#6C63FF] font-bold text-xs uppercase tracking-widest">Support</span>
-              <h3 className="font-display text-3xl md:text-4xl font-bold mt-4">Frequently <br className="hidden lg:block" /> Asked Questions</h3>
-              <p className="text-[#9090A8] leading-relaxed max-w-sm mx-auto lg:mx-0 text-sm mt-6">
+              <span className="text-[#6C63FF] font-black text-xs md:text-sm uppercase tracking-widest bg-[#6C63FF]/10 px-4 py-2 rounded-full">Support</span>
+              <h3 className="font-display text-4xl md:text-5xl xl:text-6xl font-black mt-8 leading-[1.1] tracking-tight">Frequently <br className="hidden lg:block" /> Asked Questions</h3>
+              <p className="text-[#9090A8] leading-relaxed max-w-sm mx-auto lg:mx-0 text-base xl:text-lg mt-8 font-medium">
                 Everything you need to know about working with us. Can't find the answer? Reach out directly.
               </p>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-5 xl:space-y-6">
               {[
                 { q: "How long does a project take?", a: "Starter projects take 7 days. Professional targets 14 days. Custom builds vary by complexity." },
                 { q: "How do we communicate?", a: "We use Slack, WhatsApp, or Email—whichever you prefer. You'll get daily progress updates." },
@@ -2463,17 +2568,17 @@ export default function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
-                  className={`border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 ${openFaqIndex === i ? 'bg-white/10 border-white/20' : 'bg-white/5 hover:bg-white/10'}`}
+                  className={`border border-white/10 rounded-[2rem] overflow-hidden transition-all duration-500 ${openFaqIndex === i ? 'bg-white/10 border-white/20 shadow-2xl' : 'bg-white/5 hover:bg-white/[0.08] hover:border-white/20'}`}
                 >
                   <button 
                     onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                    className="w-full p-6 text-left flex items-center justify-between group"
+                    className="w-full p-6 xl:p-8 text-left flex items-center justify-between group"
                   >
-                    <h4 className="font-bold text-sm transition-colors text-white">{faq.q}</h4>
+                    <h4 className="font-bold text-sm xl:text-base transition-colors text-white tracking-tight">{faq.q}</h4>
                     <motion.div
                       animate={{ rotate: openFaqIndex === i ? 180 : 0 }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                      className="text-[#6C63FF]"
+                      className="text-[#6C63FF] bg-[#6C63FF]/10 p-2 rounded-full"
                     >
                       <ChevronDown size={18} />
                     </motion.div>
@@ -2484,10 +2589,10 @@ export default function App() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                       >
-                        <div className="px-6 pb-6 pt-0">
-                          <p className="text-xs md:text-sm text-[#9090A8] leading-relaxed border-t border-white/5 pt-4">
+                        <div className="px-6 xl:px-8 pb-6 xl:pb-8 pt-0">
+                          <p className="text-sm xl:text-base text-[#9090A8] leading-relaxed border-t border-white/5 pt-6 font-medium">
                             {faq.a}
                           </p>
                         </div>
@@ -2500,14 +2605,14 @@ export default function App() {
           </div>
 
           {/* Right Side: Contact Form */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-7 space-y-10 xl:space-y-14 lg:sticky lg:top-32">
             <div className="text-center lg:text-left">
-              <span className="text-[#6C63FF] font-bold text-xs uppercase tracking-widest">Get In Touch</span>
-              <h2 className="font-display text-[clamp(1.4rem,7.5vw,2.5rem)] md:text-5xl font-bold mt-4 leading-[1.2] md:leading-tight">
+              <span className="text-[#6C63FF] font-black text-xs md:text-sm uppercase tracking-widest bg-[#6C63FF]/10 px-4 py-2 rounded-full">Get In Touch</span>
+              <h2 className="font-display text-4xl md:text-5xl xl:text-7xl font-black mt-8 leading-[1.05] tracking-tight">
                 <span className="block whitespace-nowrap">Let's build something</span>
                 <span className="block text-[#6C63FF]">remarkable together</span>
               </h2>
-              <p className="text-[#9090A8] leading-relaxed mt-6">
+              <p className="text-[#9090A8] leading-relaxed mt-8 text-base xl:text-lg font-medium">
                 Tell us about your project and our team will get back to you with a roadmap within 24 hours.
               </p>
             </div>
@@ -2554,7 +2659,13 @@ export default function App() {
           <ExpertiseDetailPage 
             type={currentView as any} 
             onBack={() => { setCurrentView('home'); window.scrollTo(0, 0); }} 
-            onContactClick={() => { setCurrentView('contact'); window.scrollTo(0, 0); }}
+            onContactClick={() => { 
+              setCurrentView('home');
+              setTimeout(() => {
+                const el = document.getElementById('contact');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }}
           />
         ) : (
           <motion.div key="detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
