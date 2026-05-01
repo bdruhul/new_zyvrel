@@ -17,6 +17,7 @@ import {
   Calendar,
   Clock,
   User,
+  X,
   ArrowRight,   Check, 
   Linkedin, 
   Twitter, 
@@ -104,17 +105,19 @@ const RotatingBorderContainer = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const RotatingBorderButton = ({ children, onClick, className = "" }: { children: ReactNode, onClick?: () => void, className?: string }) => {
+const RotatingBorderButton = ({ children, onClick, className = "", disabled = false, type = "button" }: { children: ReactNode, onClick?: () => void, className?: string, disabled?: boolean, type?: "button" | "submit" }) => {
   return (
     <button 
-      onClick={onClick}
-      className={`relative p-[1px] overflow-hidden rounded-xl group/btn-rotate shadow-[0_0_20px_rgba(108,99,255,0.15)] hover:shadow-[0_0_35px_rgba(108,99,255,0.35)] transition-all duration-500 ${className}`}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      type={type}
+      className={`relative p-[1px] overflow-hidden rounded-xl group/btn-rotate shadow-[0_0_20px_rgba(108,99,255,0.15)] hover:shadow-[0_0_35px_rgba(108,99,255,0.35)] transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
     >
       {/* Animated Rotating Border */}
       <div className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_90deg,#6C63FF_180deg,transparent_270deg,transparent_360deg)] animate-border-rotate opacity-100 group-hover/btn-rotate:opacity-100 transition-opacity duration-500" />
       
       {/* Inner Content */}
-      <div className="relative bg-[#080810]/90 backdrop-blur-xl rounded-[11px] px-5 py-2.5 flex items-center justify-center gap-2 group-hover/btn-rotate:bg-[#6C63FF]/20 transition-all whitespace-nowrap">
+      <div className="relative bg-[#080810]/90 backdrop-blur-xl rounded-[11px] px-5 py-2.5 flex items-center justify-center gap-2 group-hover/btn-rotate:bg-[#6C63FF]/20 transition-all whitespace-nowrap text-white">
         {children}
       </div>
     </button>
@@ -122,6 +125,322 @@ const RotatingBorderButton = ({ children, onClick, className = "" }: { children:
 };
 
 // Blog Page Component
+const ContactForm = () => {
+  const [state, setState] = useState<'idle' | 'submitting' | 'success'>('idle');
+
+  return (
+    <div className="relative">
+      <AnimatePresence mode="wait">
+        {state === 'success' ? (
+          <motion.div 
+            key="success"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-12 text-center flex flex-col items-center justify-center min-h-[500px]"
+          >
+            <div className="w-20 h-20 bg-[#6C63FF] rounded-full flex items-center justify-center mb-8 shadow-2xl shadow-[#6C63FF]/40">
+              <Check size={40} className="text-white" strokeWidth={3} />
+            </div>
+            <h3 className="font-display text-3xl font-bold mb-4">Message Received!</h3>
+            <p className="text-[#9090A8] max-w-sm leading-relaxed mb-8">
+              Our agent will contact you as soon as possible.
+            </p>
+            <button 
+              onClick={() => setState('idle')}
+              className="text-white font-bold hover:text-[#6C63FF] transition-colors underline py-2"
+            >
+              Send another message
+            </button>
+          </motion.div>
+        ) : (
+          <motion.form 
+            key="form"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="p-8 md:p-12 space-y-6" 
+            onSubmit={(e) => {
+              e.preventDefault();
+              setState('submitting');
+              setTimeout(() => setState('success'), 1500);
+            }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">First Name *</label>
+                <input required type="text" placeholder="John" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all text-white" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Last Name *</label>
+                <input required type="text" placeholder="Smith" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all text-white" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Email *</label>
+                <input required type="email" placeholder="john@company.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all text-white" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Phone Number *</label>
+                <input 
+                  required 
+                  type="tel" 
+                  placeholder="+1 000 000 0000" 
+                  onInput={(e) => {
+                    e.currentTarget.value = e.currentTarget.value.replace(/[^\d+ ]/g, '');
+                  }}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all text-white" 
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Project Details *</label>
+              <textarea required rows={6} placeholder="Describe your goals, challenges, and vision..." className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all resize-none text-white" />
+            </div>
+            <RotatingBorderButton className="w-full" disabled={state === 'submitting'} type="submit">
+              {state === 'submitting' ? (
+                <div className="flex items-center justify-center gap-2 py-1">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <span className="font-display font-bold">Sending...</span>
+                </div>
+              ) : (
+                <>
+                  <span className="font-display font-bold py-1">Send My Project Details</span>
+                  <ArrowRight className="group-hover/btn-rotate:translate-x-1 transition-transform" />
+                </>
+              )}
+            </RotatingBorderButton>
+          </motion.form>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const PrivacyPolicyPage = ({ onBack }: { onBack: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
+      className="min-h-screen bg-[#05050A] pt-32 pb-24 px-6"
+    >
+      <div className="max-w-3xl mx-auto">
+        <button 
+          onClick={onBack}
+          className="group flex items-center gap-2 text-[#9090A8] hover:text-white transition-colors mb-12"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-sm font-bold uppercase tracking-widest">Back to Studio</span>
+        </button>
+
+        <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-8 tracking-tight">
+          Privacy <span className="text-[#6C63FF]">Policy</span>
+        </h1>
+        
+        <div className="prose prose-invert prose-sm md:prose-base max-w-none space-y-8 text-white/70 leading-relaxed">
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">1. Introduction</h2>
+            <p>
+              At Zyvrel Digital, we respect your privacy and are committed to protecting your personal data. This privacy policy will inform you as to how we look after your personal data when you visit our website and tell you about your privacy rights and how the law protects you.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">2. The Data We Collect</h2>
+            <p>
+              We may collect, use, store and transfer different kinds of personal data about you which we have grouped together as follows:
+            </p>
+            <ul className="list-disc pl-5 space-y-2 mt-4">
+              <li><strong>Identity Data</strong> includes first name, last name, username or similar identifier.</li>
+              <li><strong>Contact Data</strong> includes email address and telephone numbers.</li>
+              <li><strong>Usage Data</strong> includes information about how you use our website and services.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">3. How We Use Your Data</h2>
+            <p>
+              We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:
+            </p>
+            <ul className="list-disc pl-5 space-y-2 mt-4">
+              <li>To provide you with information or services that you request from us.</li>
+              <li>To improve our website and customer service.</li>
+              <li>To contact you regarding projects or inquiries.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">4. Data Security</h2>
+            <p>
+              We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorised way, altered or disclosed.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">5. Your Legal Rights</h2>
+            <p>
+              Under certain circumstances, you have rights under data protection laws in relation to your personal data, including the right to request access, correction, erasure, or restriction of processing.
+            </p>
+          </section>
+
+          <div className="pt-12 border-t border-white/5 text-[10px] uppercase tracking-widest font-bold opacity-50">
+            Last Updated: May 2024
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const TermsPage = ({ onBack }: { onBack: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
+      className="min-h-screen bg-[#05050A] pt-32 pb-24 px-6"
+    >
+      <div className="max-w-3xl mx-auto">
+        <button 
+          onClick={onBack}
+          className="group flex items-center gap-2 text-[#9090A8] hover:text-white transition-colors mb-12"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-sm font-bold uppercase tracking-widest">Back to Studio</span>
+        </button>
+
+        <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-8 tracking-tight">
+          Terms of <span className="text-[#6C63FF]">Service</span>
+        </h1>
+        
+        <div className="prose prose-invert prose-sm md:prose-base max-w-none space-y-8 text-white/70 leading-relaxed">
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">1. Agreement to Terms</h2>
+            <p>
+              By accessing our website, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you are prohibited from using or accessing this site.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">2. Intellectual Property</h2>
+            <p>
+              The content, features, and functionality of Zyvrel Digital are owned by us and are protected by international copyright, trademark, patent, and other intellectual property or proprietary rights laws.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">3. Project Engagement</h2>
+            <p>
+              All project engagements are subject to a separate written agreement. The information provided on this website does not constitute a binding offer.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-white mb-4">4. Limitation of Liability</h2>
+            <p>
+              Zyvrel Digital shall not be liable for any indirect, incidental, special, consequential or punitive damages resulting from your use of clinical applications or services.
+            </p>
+          </section>
+
+          <div className="pt-12 border-t border-white/5 text-[10px] uppercase tracking-widest font-bold opacity-50">
+            Last Updated: May 2024
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const ExpertiseDetailPage = ({ type, onBack, onContactClick }: { type: 'ecommerce' | 'webdesign' | 'uiux' | 'seo', onBack: () => void, onContactClick: () => void }) => {
+  const content = {
+    'ecommerce': {
+      title: 'E-commerce Solutions',
+      icon: <ShoppingCart size={40} className="text-[#6C63FF]" />,
+      desc: 'We engineer high-converting digital storefronts that turn browsers into lifelong customers.',
+      full: 'From Shopify optimization to custom headless commerce builds, we focus on the metrics that matter: site speed, conversion rate, and average order value. Our solutions are built to scale with your growth.',
+      metrics: ['+45% Conversion Rate', '0.8s Load Times', 'Seamless Scale']
+    },
+    'webdesign': {
+      title: 'Custom Web Design',
+      icon: <Monitor size={40} className="text-[#6C63FF]" />,
+      desc: 'Bespoke web experiences that blend aesthetic elegance with technical precision.',
+      full: 'We don\'t use templates. Every site is a unique architectural masterpiece designed to reflect your brand\'s DNA. We prioritize accessibility, performance, and distinctive visual storytelling.',
+      metrics: ['Unique Branding', 'Mobile Focused', 'WCAG Compliant']
+    },
+    'uiux': {
+      title: 'UI/UX Strategy',
+      icon: <PenTool size={40} className="text-[#6C63FF]" />,
+      desc: 'User-centric design systems and strategic interfaces that drive deep engagement.',
+      full: 'Great design is invisible. We map user journeys and build design systems that make complex interactions feel effortless. Our approach is data-informed and human-centric.',
+      metrics: ['Intuitive Flow', 'Design Systems', 'User Research']
+    },
+    'seo': {
+      title: 'SEO Performance',
+      icon: <BarChart3 size={40} className="text-[#6C63FF]" />,
+      desc: 'Technical SEO and content strategy to dominate search rankings and sustainable growth.',
+      full: 'Visibility is oxygen for business. We go beyond keywords to build technical authority and content ecosystems that rank. We focus on long-term organic growth that reduces your dependence on paid ads.',
+      metrics: ['Page 1 Rankings', 'Traffic Velocity', 'Technical Edge']
+    }
+  }[type];
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      exit={{ opacity: 0 }}
+      className="min-h-screen bg-[#05050A] pt-32 pb-24 px-6"
+    >
+      <div className="max-w-4xl mx-auto">
+        <button 
+          onClick={onBack}
+          className="group flex items-center gap-2 text-[#9090A8] hover:text-white transition-colors mb-12"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-sm font-bold uppercase tracking-widest">Back to Studio</span>
+        </button>
+
+        <div className="mb-12">
+          <div className="mb-6">{content.icon}</div>
+          <h1 className="text-4xl md:text-6xl font-display font-black text-white mb-6 tracking-tight">
+            {content.title.split(' ')[0]} <span className="text-[#6C63FF]">{content.title.split(' ').slice(1).join(' ')}</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-white/50 leading-relaxed font-medium">
+            {content.desc}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+          <div className="text-white/70 leading-relaxed space-y-6">
+            <p>{content.full}</p>
+            <p>Our approach combines market psychology with cutting-edge technology to ensure your digital presence isn't just a website, but a business asset.</p>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-xs uppercase tracking-widest font-black text-[#6C63FF] mb-6">Key Results</h3>
+            {content.metrics.map((m, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 flex items-center gap-4">
+                <div className="w-8 h-8 rounded-full bg-[#6C63FF]/20 flex items-center justify-center text-[#6C63FF]">
+                  <Check size={14} strokeWidth={3} />
+                </div>
+                <span className="font-bold text-white uppercase tracking-wider text-xs md:text-sm">{m}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <RotatingBorderButton 
+          onClick={onContactClick}
+          className="w-full md:w-auto"
+        >
+          <span className="px-8 font-black uppercase tracking-widest text-xs">Start a Project</span>
+        </RotatingBorderButton>
+      </div>
+    </motion.div>
+  );
+};
+
 const BlogPage = ({ onBack, onOpenPost }: { onBack: () => void; onOpenPost: (post: any) => void }) => {
   const blogs = [
     { title: "The Future of Shopify in 2026", tag: "E-commerce", date: "Mar 12, 2026", emoji: "🛒", excerpt: "Optimize your Shopify store for better sales by understanding user psychology and data trends." },
@@ -339,7 +658,7 @@ const ProblemsPage = ({ onHome, caseStudies, onOpenCase }: {
                 </div>
 
                 <div className="pt-6 mt-8 border-t border-white/5 flex items-center justify-between group/btn">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#9090A8] group-hover:text-white transition-colors">View Case Study</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white group-hover:opacity-80 transition-all">View Case Study</span>
                   <div className="w-10 h-10 rounded-full bg-[#6C63FF]/10 flex items-center justify-center text-[#6C63FF] group-hover:bg-[#6C63FF] group-hover:text-white transition-all shadow-lg shadow-[#6C63FF]/5">
                     <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
                   </div>
@@ -364,7 +683,6 @@ const ProblemsPage = ({ onHome, caseStudies, onOpenCase }: {
           </div>
         </div>
       </div>
-      <Footer />
     </motion.div>
   );
 };
@@ -420,7 +738,7 @@ const pricingData: Record<string, { title: string; plans: any[] }> = {
   }
 };
 
-const BlogPostView = ({ post, onBack }: { post: any; onBack: () => void }) => {
+const BlogPostView = ({ post, onBack, onHome }: { post: any; onBack: () => void; onHome: () => void }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -518,30 +836,33 @@ const BlogPostView = ({ post, onBack }: { post: any; onBack: () => void }) => {
           </p>
         </div>
 
-        {/* Bottom Back Button */}
-        <div className="mt-24 mb-12 flex justify-center">
-          <RotatingBorderButton onClick={onBack}>
-            <div className="flex items-center gap-2 py-0.5 px-6">
-              <ArrowLeft size={14} />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Return to Hub</span>
-            </div>
-          </RotatingBorderButton>
-        </div>
-
         {/* CTA */}
-        <div className="p-12 bg-gradient-to-br from-[#6C63FF] to-[#A78BFA] rounded-[2.5rem] text-center relative overflow-hidden group">
+        <div className="mt-24 p-12 bg-gradient-to-br from-[#6C63FF] to-[#A78BFA] rounded-[2.5rem] text-center relative overflow-hidden group">
           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <h2 className="font-display text-3xl md:text-4xl font-black text-white mb-6 relative z-10">
+          <h2 className="font-display text-3xl md:text-4xl font-black text-white mb-8 relative z-10">
             Ready to apply these <br /> insights to your project?
           </h2>
-          <RotatingBorderButton 
-            onClick={() => {
-              onBack();
-              setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100);
-            }}
-          >
-            <span className="text-[10px] font-bold uppercase tracking-widest py-0.5 px-8">Work With Us</span>
-          </RotatingBorderButton>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 relative z-10">
+            <RotatingBorderButton 
+              onClick={() => {
+                onHome();
+                setTimeout(() => {
+                  const el = document.getElementById('contact');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 600);
+              }}
+            >
+              <span className="text-[10px] font-bold uppercase tracking-widest py-0.5 px-8 whitespace-nowrap">Work With Us</span>
+            </RotatingBorderButton>
+
+            <RotatingBorderButton onClick={onBack}>
+              <div className="flex items-center gap-2 py-0.5 px-6">
+                <ArrowLeft size={14} />
+                <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Return to Hub</span>
+              </div>
+            </RotatingBorderButton>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -773,77 +1094,278 @@ const CaseStudyDetail = ({ caseId, onBack, caseStudies }: {
           </RotatingBorderButton>
         </div>
       </div>
-      <Footer />
     </motion.div>
   );
 };
 
 // Extracted Footer Component
-const Footer = () => (
-  <footer className="bg-black/40 pt-24 pb-12 px-6 md:px-16 border-t border-white/5 w-full">
+const Footer = ({ onPageClick }: { onPageClick: (view: any) => void }) => (
+  <footer className="bg-black/40 pt-12 pb-8 px-6 md:px-16 border-t border-white/5 w-full">
     <div className="max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-        <div className="col-span-1 md:col-span-2">
-          <div className="font-display font-bold text-2xl mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 mb-12">
+        <div className="col-span-2 md:col-span-2">
+          <div className="font-display font-medium text-xl mb-4">
             ZYVREL <span className="text-[#6C63FF]">DIGITAL</span>
           </div>
-          <p className="text-[#9090A8] max-w-sm mb-8 leading-relaxed">
-            We build high-performance digital experiences that drive growth. 
-            From custom Shopify stores to performant custom websites, we've got you covered.
+          <p className="text-white/50 text-xs max-w-[280px] mb-6 leading-relaxed">
+            Crafting high-end digital experiences that convert. 
+            E-commerce & Custom Development Experts.
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {[Linkedin, Twitter, Instagram, Facebook].map((Icon, i) => (
               <a 
                 key={i} 
                 href="#" 
-                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:border-[#6C63FF] hover:bg-[#6C63FF]/10 transition-all"
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 hover:border-[#6C63FF] hover:bg-[#6C63FF]/10 transition-all text-white/70 hover:text-white"
               >
-                <Icon size={18} />
+                <Icon size={14} />
               </a>
             ))}
           </div>
         </div>
         <div>
-          <h4 className="font-bold mb-6">Expertise</h4>
-          <ul className="space-y-4 text-[#9090A8] text-sm font-medium">
-            <li className="hover:text-white transition-colors cursor-pointer">E-commerce Solutions</li>
-            <li className="hover:text-white transition-colors cursor-pointer">Custom Web Design</li>
-            <li className="hover:text-white transition-colors cursor-pointer">UI/UX Strategy</li>
-            <li className="hover:text-white transition-colors cursor-pointer">SEO Performance</li>
+          <h4 className="text-[11px] uppercase tracking-widest font-black text-white/90 mb-4">Expertise</h4>
+          <ul className="space-y-3 text-white/50 text-[11px] font-medium">
+            <li onClick={() => onPageClick('ecommerce')} className="hover:text-white transition-colors cursor-pointer">E-commerce Solutions</li>
+            <li onClick={() => onPageClick('webdesign')} className="hover:text-white transition-colors cursor-pointer">Custom Web Design</li>
+            <li onClick={() => onPageClick('uiux')} className="hover:text-white transition-colors cursor-pointer">UI/UX Strategy</li>
+            <li onClick={() => onPageClick('seo')} className="hover:text-white transition-colors cursor-pointer">SEO Performance</li>
           </ul>
         </div>
         <div>
-          <h4 className="font-bold mb-6">Company</h4>
-          <ul className="space-y-4 text-[#9090A8] text-sm font-medium">
-            <li className="hover:text-white transition-colors cursor-pointer">Our Work</li>
-            <li className="hover:text-white transition-colors cursor-pointer">Case Studies</li>
-            <li className="hover:text-white transition-colors cursor-pointer">Contact Us</li>
-            <li className="hover:text-white transition-colors cursor-pointer">Privacy Policy</li>
+          <h4 className="text-[11px] uppercase tracking-widest font-black text-white/90 mb-4">Company</h4>
+          <ul className="space-y-3 text-white/50 text-[11px] font-medium">
+            <li onClick={() => onPageClick('problems')} className="hover:text-white transition-colors cursor-pointer">Our Work</li>
+            <li onClick={() => onPageClick('problems')} className="hover:text-white transition-colors cursor-pointer">Case Studies</li>
+            <li onClick={() => onPageClick('contact')} className="hover:text-white transition-colors cursor-pointer">Contact Us</li>
+            <li 
+              onClick={() => onPageClick('privacy')}
+              className="hover:text-white transition-colors cursor-pointer"
+            >
+              Privacy Policy
+            </li>
           </ul>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 gap-4">
-        <div className="text-[#9090A8] text-xs font-medium">
-          © {new Date().getFullYear()} Zyvrel Digital. All rights reserved.
+      <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-white/5 gap-4">
+        <div className="text-white/40 text-[10px] font-medium tracking-tight">
+          © {new Date().getFullYear()} Zyvrel Digital. Crafting with precision.
         </div>
-        <div className="flex gap-8 text-[#9090A8] text-xs font-medium">
-          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+        <div className="flex gap-6 text-white/40 text-[10px] font-medium">
+          <button onClick={() => onPageClick('terms')} className="hover:text-white transition-all underline decoration-white/0 hover:decoration-white/20">Terms</button>
+          <button 
+            onClick={() => onPageClick('privacy')}
+            className="hover:text-white transition-all underline decoration-white/0 hover:decoration-white/20"
+          >
+            Privacy
+          </button>
         </div>
       </div>
     </div>
   </footer>
 );
 
+// Consultation Modal Component
+const ConsultationModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const [step, setStep] = useState<'form' | 'success'>('form');
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const timeSlots = Array.from({ length: 48 }, (_, i) => {
+    const hour = Math.floor(i / 2);
+    const minute = i % 2 === 0 ? '00' : '30';
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour.toString().padStart(2, '0')}:${minute} ${ampm}`;
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+      setTimeout(() => {
+        setStep('form');
+        setSelectedTime(null);
+      }, 300);
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-[#080810]/95 backdrop-blur-md"
+        onClick={onClose}
+      />
+      
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        className="relative w-full max-w-lg mx-4 z-10"
+        onClick={e => e.stopPropagation()}
+      >
+        <RotatingBorderContainer>
+          <div className="p-5 md:p-8 relative overflow-hidden">
+            {/* Background Gradient Glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#6C63FF]/10 blur-[80px] rounded-full pointer-events-none -z-1" />
+            
+            <button 
+              onClick={onClose}
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-[#6C63FF] transition-all z-20 group"
+            >
+              <X size={16} className="group-hover:rotate-90 transition-transform duration-300" />
+            </button>
+
+            <AnimatePresence mode="wait">
+              {step === 'form' ? (
+                <motion.div
+                  key="form"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                >
+                  <div className="inline-flex items-center gap-2 bg-[#6C63FF]/10 border border-[#6C63FF]/20 px-3 py-1 rounded-full mb-3 text-[#A78BFA] text-[9px] font-bold tracking-wider uppercase">
+                    <span className="w-1.5 h-1.5 bg-[#6C63FF] rounded-full animate-pulse" />
+                    ✦ Discovery Call · 30 MIN
+                  </div>
+                  
+                  <h2 className="font-sans text-xl md:text-3xl font-black mb-1 md:mb-1.5 tracking-tight text-white leading-tight">Book a Consultation</h2>
+                  <p className="text-[#9090A8] text-[10px] md:text-sm leading-relaxed mb-3 md:mb-4 font-sans">Choose a slot to discuss your goals.</p>
+
+                  <form onSubmit={(e) => { e.preventDefault(); setStep('success'); }} className="space-y-2.5 md:space-y-3.5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[8px] md:text-[9px] uppercase tracking-wider font-extrabold text-[#9090A8] font-sans">First Name *</label>
+                        <input 
+                          required 
+                          type="text" 
+                          placeholder="John" 
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs text-white outline-none focus:border-[#6C63FF] transition-all placeholder:text-[#4a4a68] font-sans"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[8px] md:text-[9px] uppercase tracking-wider font-extrabold text-[#9090A8] font-sans">Last Name *</label>
+                        <input 
+                          required 
+                          type="text" 
+                          placeholder="Smith" 
+                          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs text-white outline-none focus:border-[#6C63FF] transition-all placeholder:text-[#4a4a68] font-sans"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[8px] md:text-[9px] uppercase tracking-wider font-extrabold text-[#9090A8] font-sans">Email Address *</label>
+                      <input 
+                        required 
+                        type="email" 
+                        placeholder="you@company.com" 
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs text-white outline-none focus:border-[#6C63FF] transition-all placeholder:text-[#4a4a68] font-sans"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[8px] md:text-[9px] uppercase tracking-wider font-extrabold text-[#9090A8] font-sans">Preferred Date *</label>
+                        <div className="relative">
+                          <input 
+                            required 
+                            type="date" 
+                            onClick={(e) => (e.currentTarget as any).showPicker?.()}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs text-white outline-none focus:border-[#6C63FF] transition-all appearance-none font-sans cursor-pointer [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0"
+                          />
+                          <Calendar size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#9090A8] pointer-events-none" />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[8px] md:text-[9px] uppercase tracking-wider font-extrabold text-[#9090A8] font-sans">Time Slot *</label>
+                        <div className="relative group">
+                          <select 
+                            required
+                            value={selectedTime || ""}
+                            onChange={(e) => setSelectedTime(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 md:px-4 md:py-2.5 text-[11px] md:text-xs text-white outline-none focus:border-[#6C63FF] transition-all appearance-none cursor-pointer font-sans"
+                          >
+                            <option value="" disabled className="bg-[#0A0E2A]">Select a time</option>
+                            {timeSlots.map(time => (
+                              <option key={time} value={time} className="bg-[#0A0E2A] text-white py-2">{time}</option>
+                            ))}
+                          </select>
+                          <Clock size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#9090A8] pointer-events-none" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 md:pt-3 flex justify-center">
+                      <button 
+                        type="submit"
+                        disabled={!selectedTime}
+                        className={`group relative inline-flex items-center justify-center gap-3 font-sans font-bold py-2 md:py-2.5 px-6 md:px-8 rounded-lg transition-all duration-300 active:scale-[0.98] overflow-hidden ${
+                          !selectedTime 
+                            ? 'bg-[#6C63FF]/40 text-white' 
+                            : 'bg-[#6C63FF] text-white hover:bg-[#5b52ff] hover:shadow-[0_8px_25px_-10px_rgba(108,99,255,0.6)]'
+                        }`}
+                      >
+                        <span className="relative z-10 flex items-center gap-2 text-[11px] md:text-sm font-bold">
+                          Confirm Booking 
+                          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                        </span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                      </button>
+                    </div>
+                  </form>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-12 relative z-10"
+                >
+                  <div className="w-24 h-24 bg-[#10B981]/10 rounded-full flex items-center justify-center mx-auto mb-8 text-[#10B981] border border-[#10B981]/20">
+                    <Check size={48} strokeWidth={3} />
+                  </div>
+                  <h2 className="font-sans text-4xl font-black mb-4 tracking-tight text-white">Booking Confirmed!</h2>
+                  <p className="text-[#9090A8] text-lg leading-relaxed mb-10 max-w-sm mx-auto font-sans">
+                    We've scheduled your session for <span className="text-white font-bold">{selectedTime}</span> and sent a calendar invite to your email.
+                  </p>
+                  <button 
+                    onClick={onClose}
+                    className="w-full bg-white/5 border border-white/10 py-5 rounded-xl text-base font-bold text-white hover:bg-white/10 transition-all active:scale-[0.98] font-sans"
+                  >
+                    Done
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </RotatingBorderContainer>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function App() {
   const [formState, setFormState] = useState<'idle' | 'success'>('idle');
+  const [contactFormState, setContactFormState] = useState<'idle' | 'submitting' | 'success'>('idle');
   const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [currentView, setCurrentView] = useState<'home' | 'problems' | 'detail' | 'blog' | 'single-blog'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'problems' | 'detail' | 'blog' | 'single-blog' | 'privacy' | 'terms' | 'ecommerce' | 'webdesign' | 'uiux' | 'seo'>('home');
   const [selectedBlogPost, setSelectedBlogPost] = useState<any>(null);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [activeServicePricing, setActiveServicePricing] = useState<string | null>(null);
+  const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [visibleVideos, setVisibleVideos] = useState(5);
   const { scrollYProgress } = useScroll();
 
@@ -1012,6 +1534,8 @@ export default function App() {
     { title: "Digital Marketing", icon: <Target size={16} /> },
   ];
 
+  const [mainProblem, setMainProblem] = useState<string>("");
+
   const handleSelectService = (service: string) => {
     setSelectedService(prev => prev === service ? null : service);
   };
@@ -1030,10 +1554,13 @@ export default function App() {
         <div className="max-w-[98%] md:max-w-7xl mx-auto px-2 md:px-0">
           <div className="relative p-[1px] overflow-hidden rounded-xl md:rounded-2xl shadow-2xl shadow-[#6C63FF]/20">
             {/* Animated Rotating Border */}
-            <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_90deg,#6C63FF_180deg,transparent_270deg,transparent_360deg)] animate-border-rotate opacity-80" />
+            <div className="absolute inset-[-1000%] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_90deg,#6C63FF_180deg,transparent_270deg,transparent_360deg)] animate-border-rotate" />
             
             {/* Inner Content */}
-            <div className="relative bg-[#080810]/80 backdrop-blur-xl rounded-[11px] md:rounded-[15px] flex items-center justify-between px-3 py-2.5 md:px-6 lg:px-8 md:py-3 border border-white/5">
+            <div 
+              style={{ background: 'linear-gradient(90deg, #0a0e2a 0%, #0d1340 100%)' }}
+              className="relative backdrop-blur-xl rounded-[11px] md:rounded-[15px] flex items-center justify-between px-3 py-2.5 md:px-6 lg:px-8 md:py-3"
+            >
               <button 
                 onClick={() => {
                   if (currentView !== 'home') {
@@ -1045,7 +1572,7 @@ export default function App() {
               >
                 ZYVREL <span className="text-[#6C63FF]">DIGITAL</span>
               </button>
-              <ul className="hidden md:flex gap-4 lg:gap-9 text-sm lg:text-[15px] font-bold text-white/90">
+              <ul className="hidden md:flex gap-4 lg:gap-9 text-sm lg:text-[15px] font-bold text-white">
                 <li className="hover:text-white transition-colors cursor-none">
                   {currentView === 'home' ? <a href="#services">Services</a> : <button onClick={() => { setCurrentView('home'); setTimeout(() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' }), 50); }}>Services</button>}
                 </li>
@@ -1060,12 +1587,9 @@ export default function App() {
                 </li>
               </ul>
               <RotatingBorderButton 
-                onClick={() => {
-                  if (currentView !== 'home') setCurrentView('home');
-                  setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 50);
-                }}
+                onClick={() => setIsConsultationModalOpen(true)}
               >
-                <span className="text-[10px] sm:text-[11px] md:text-xs font-bold whitespace-nowrap">Book Consultation</span>
+                <span className="text-[10px] sm:text-[11px] md:text-xs font-bold whitespace-nowrap text-white">Book Consultation</span>
               </RotatingBorderButton>
             </div>
           </div>
@@ -1129,7 +1653,7 @@ export default function App() {
               </div>
             </div>
             
-            <h1 className="font-display text-[clamp(1.6rem,8.5vw,3.5rem)] md:text-[clamp(3.5rem,7vw,5.5rem)] font-black leading-[1.15] md:leading-[1.0] tracking-tight mb-6 md:mb-8 text-white">
+            <h1 className="font-display text-[clamp(2.2rem,9.5vw,4.5rem)] md:text-[clamp(3.5rem,7vw,5.5rem)] font-black leading-[1.1] md:leading-[1.0] tracking-tight mb-6 md:mb-8 text-white">
               <span className="whitespace-nowrap">Transform Your</span> <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6C63FF] via-[#A78BFA] to-white bg-[length:200%_auto] animate-gradient-flow">
                 Digital Future.
@@ -1232,15 +1756,16 @@ export default function App() {
                           <div className="relative">
                             <select 
                               required 
-                              defaultValue=""
-                              className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all z-20"
+                              value={mainProblem}
+                              onChange={(e) => setMainProblem(e.target.value)}
+                              className="w-full bg-white/5 border border-[#6C63FF]/20 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[#6C63FF] focus:ring-1 focus:ring-[#6C63FF]/50 transition-all z-20"
                             >
-                              <option value="" disabled className="bg-[#080810]">Select your main challenge</option>
-                              <option value="outdated" className="bg-[#080810]">My website looks outdated</option>
-                              <option value="traffic" className="bg-[#080810]">Not getting traffic from Google</option>
-                              <option value="conversion" className="bg-[#080810]">Visitors don't convert to customers</option>
-                              <option value="shopify" className="bg-[#080810]">My Shopify store isn't selling</option>
-                              <option value="brand-new" className="bg-[#080810]">I need a brand new website</option>
+                              <option value="" disabled className="bg-[#080810] text-[#9090A8]">Select your main challenge</option>
+                              <option value="outdated" className="bg-[#080810] text-white">My website looks outdated</option>
+                              <option value="traffic" className="bg-[#080810] text-white">Not getting traffic from Google</option>
+                              <option value="conversion" className="bg-[#080810] text-white">Visitors don't convert to customers</option>
+                              <option value="shopify" className="bg-[#080810] text-white">My Shopify store isn't selling</option>
+                              <option value="brand-new" className="bg-[#080810] text-white">I need a brand new website</option>
                             </select>
                           </div>
                         </div>
@@ -1256,7 +1781,7 @@ export default function App() {
                                 className={`flex items-center gap-2 px-2 sm:px-3 py-2 rounded-lg border text-[9px] sm:text-[11px] font-semibold transition-all whitespace-nowrap ${
                                   selectedService === service.title
                                     ? 'bg-[#6C63FF]/20 border-[#6C63FF] text-white shadow-lg shadow-[#6C63FF]/10'
-                                    : 'bg-white/5 border-[#6C63FF]/10 text-[#9090A8] hover:border-[#6C63FF]/50'
+                                    : 'bg-white/5 border-[#6C63FF]/10 text-white hover:border-[#6C63FF]/50'
                                 }`}
                               >
                                 <span className="flex-shrink-0">{service.icon}</span>
@@ -1267,9 +1792,9 @@ export default function App() {
                           </div>
                         </div>
 
-                        <RotatingBorderButton className="w-full mt-4">
-                          <span className="font-display font-bold py-1">Receive My Free Audit</span>
-                          <ArrowRight size={18} className="group-hover/btn-rotate:translate-x-1 transition-transform" />
+                        <RotatingBorderButton className="w-full mt-4" type="submit">
+                          <span className="font-display font-bold py-1 text-white">Receive My Free Audit</span>
+                          <ArrowRight size={18} className="group-hover/btn-rotate:translate-x-1 transition-transform text-white" />
                         </RotatingBorderButton>
                         
                         <p className="text-center text-[10px] text-[#9090A8] opacity-60">
@@ -1293,7 +1818,7 @@ export default function App() {
                       </p>
                       <button 
                         onClick={() => setFormState('idle')}
-                        className="mt-8 text-[#6C63FF] text-xs md:text-sm font-bold hover:underline"
+                        className="mt-8 text-white text-xs md:text-sm font-bold hover:text-[#6C63FF] transition-colors underline"
                       >
                         Send another request
                       </button>
@@ -1446,7 +1971,7 @@ export default function App() {
           <h2 className="font-display text-3xl md:text-5xl font-bold mt-4 leading-tight">Everything you need <br className="hidden md:block" /> to win your market</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             { 
               title: "Web Design & Dev", 
@@ -1518,7 +2043,7 @@ export default function App() {
                   }}
                   className="w-full sm:w-auto"
                 >
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#9090A8] group-hover/btn-rotate:text-white transition-all py-1">
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white group-hover/btn-rotate:opacity-80 transition-all py-1">
                     Ask Question
                   </span>
                 </RotatingBorderButton>
@@ -1669,7 +2194,7 @@ export default function App() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#6C63FF] animate-pulse" />
               Complete Digital Partner
             </div>
-            <h2 className="font-display text-4xl md:text-8xl font-black leading-[0.9] tracking-tighter">
+            <h2 className="font-display text-[clamp(2.2rem,8vw,3.5rem)] md:text-[clamp(3.5rem,9vw,6rem)] lg:text-7xl font-black leading-[1.0] tracking-tighter">
               <span className="whitespace-nowrap">Growth systems for</span> <br /> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#6C63FF] via-[#A78BFA] to-white">Any Tech Stack</span>
             </h2>
@@ -1833,7 +2358,7 @@ export default function App() {
           <h2 className="font-display text-3xl md:text-4xl font-bold mt-4 leading-tight">Insights to grow <br className="hidden md:block" /> your business</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {[
             { 
               emoji: "🌐", 
@@ -1855,6 +2380,13 @@ export default function App() {
               title: "Why Your Shopify Hub Isn't Converting", 
               excerpt: "Optimize your Shopify store for better sales by understanding user psychology and data trends.",
               date: "March 28, 2025" 
+            },
+            { 
+              emoji: "⚡", 
+              tag: "Performance", 
+              title: "The Speed Advantage: Why Milliseconds Matter", 
+              excerpt: "Learn how optimizing your site speed can lead to a 20% increase in revenue and user engagement.",
+              date: "March 15, 2025" 
             },
           ].map((post, i) => (
             <motion.div 
@@ -1901,107 +2433,98 @@ export default function App() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-24 px-6 md:px-16 container mx-auto">
-        <h3 className="font-display text-3xl font-bold text-center mb-16">Frequently Asked Questions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {[
-            { q: "How long does a project take?", a: "Starter projects take 7 days. Professional targets 14 days. Custom builds vary by complexity." },
-            { q: "How do we communicate?", a: "We use Slack, WhatsApp, or Email—whichever you prefer. You'll get daily progress updates." },
-            { q: "Do you offer revisions?", a: "Absolutly. Every package includes revisions. We iterate until you are 100% satisfied." },
-            { q: "What's the payment process?", a: "Usually 50% upfront and 50% on delivery. We accept bank transfers, Stripe, and Wise." },
-          ].map((faq, i) => (
-            <div key={i} className="p-8 bg-white/5 border border-white/10 rounded-2xl shadow-xl shadow-black/20 hover:border-white/20 transition-all">
-              <h4 className="font-bold text-sm md:text-base mb-3">{faq.q}</h4>
-              <p className="text-xs md:text-sm text-[#9090A8] leading-relaxed">{faq.a}</p>
+      {/* FAQ & Contact Combined Section */}
+      <section id="contact" className="py-24 md:py-40 px-6 md:px-16 container mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+          
+          {/* Left Side: FAQ */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="text-center lg:text-left">
+              <span className="text-[#6C63FF] font-bold text-xs uppercase tracking-widest">Support</span>
+              <h3 className="font-display text-3xl md:text-4xl font-bold mt-4">Frequently <br className="hidden lg:block" /> Asked Questions</h3>
+              <p className="text-[#9090A8] leading-relaxed max-w-sm mx-auto lg:mx-0 text-sm mt-6">
+                Everything you need to know about working with us. Can't find the answer? Reach out directly.
+              </p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-24 md:py-32 px-6 md:px-16 container mx-auto">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <span className="text-[#6C63FF] font-bold text-xs uppercase tracking-widest">Get In Touch</span>
-          <h2 className="font-display text-3xl md:text-5xl font-bold mt-4 leading-tight">Let's build something <br /> remarkable together</h2>
-          <p className="text-[#9090A8] mt-6 leading-relaxed">
-            Tell us about your project and our team will get back to you with a roadmap within 24 hours.
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto">
-          {/* Main Contact Form - similar to hero but maybe more fields */}
-          <RotatingBorderContainer>
-            <form className="p-8 md:p-12 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Name *</label>
-                  <input required type="text" placeholder="John Smith" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Email *</label>
-                  <input required type="email" placeholder="john@company.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all" />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Website Link</label>
-                  <input type="text" placeholder="yourwebsite.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Phone Number *</label>
-                  <input 
-                    required 
-                    type="tel" 
-                    placeholder="+1 000 000 0000" 
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(/[^\d+ ]/g, '');
-                    }}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all" 
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Service Required *</label>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                  {services.map(s => (
-                    <button
-                      key={s.title}
-                      type="button"
-                      onClick={() => handleSelectService(s.title)}
-                      className={`flex items-center gap-3 p-4 border rounded-xl transition-all whitespace-nowrap ${
-                        selectedService === s.title 
-                          ? 'bg-[#6C63FF]/20 border-[#6C63FF] text-white' 
-                          : 'bg-white/5 border-white/10 text-[#9090A8] hover:border-[#6C63FF]/40'
-                      }`}
+            
+            <div className="space-y-4">
+              {[
+                { q: "How long does a project take?", a: "Starter projects take 7 days. Professional targets 14 days. Custom builds vary by complexity." },
+                { q: "How do we communicate?", a: "We use Slack, WhatsApp, or Email—whichever you prefer. You'll get daily progress updates." },
+                { q: "Do you offer revisions?", a: "Absolutly. Every package includes revisions. We iterate until you are 100% satisfied." },
+                { q: "What's the payment process?", a: "Usually 50% upfront and 50% on delivery. We accept bank transfers, Stripe, and Wise." },
+                { q: "Do you sign NDAs?", a: "Yes, we prioritize your IP. We sign standard NDAs before any project details are shared to ensure total confidentiality." },
+                { q: "What technologies do you use?", a: "We specialize in modern stacks: React, Next.js, Framer, and Shopify for e-commerce, ensuring high performance and SEO." },
+                { q: "Can we start immediately?", a: "We typically have a 1-week lead time to ensure your dedicated team is fully ready to hit the ground running for your project." },
+              ].map((faq, i) => (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`border border-white/10 rounded-2xl overflow-hidden transition-all duration-300 ${openFaqIndex === i ? 'bg-white/10 border-white/20' : 'bg-white/5 hover:bg-white/10'}`}
+                >
+                  <button 
+                    onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                    className="w-full p-6 text-left flex items-center justify-between group"
+                  >
+                    <h4 className="font-bold text-sm transition-colors text-white">{faq.q}</h4>
+                    <motion.div
+                      animate={{ rotate: openFaqIndex === i ? 180 : 0 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      className="text-[#6C63FF]"
                     >
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
-                        selectedService === s.title ? 'border-[#6C63FF] bg-[#6C63FF]' : 'border-white/20'
-                      }`}>
-                        {selectedService === s.title && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
-                      </div>
-                      <span className="text-xs font-bold">{s.title}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-[11px] uppercase tracking-wider font-bold text-[#9090A8]">Project Details *</label>
-                <textarea rows={6} placeholder="Describe your goals, challenges, and vision..." className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm md:text-base outline-none focus:border-[#6C63FF] transition-all resize-none" />
-              </div>
-              <RotatingBorderButton className="w-full">
-                <span className="font-display font-bold py-1">Send My Project Details</span>
-                <ArrowRight className="group-hover/btn-rotate:translate-x-1 transition-transform" />
-              </RotatingBorderButton>
-            </form>
-          </RotatingBorderContainer>
+                      <ChevronDown size={18} />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {openFaqIndex === i && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      >
+                        <div className="px-6 pb-6 pt-0">
+                          <p className="text-xs md:text-sm text-[#9090A8] leading-relaxed border-t border-white/5 pt-4">
+                            {faq.a}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Side: Contact Form */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="text-center lg:text-left">
+              <span className="text-[#6C63FF] font-bold text-xs uppercase tracking-widest">Get In Touch</span>
+              <h2 className="font-display text-[clamp(1.4rem,7.5vw,2.5rem)] md:text-5xl font-bold mt-4 leading-[1.2] md:leading-tight">
+                <span className="block whitespace-nowrap">Let's build something</span>
+                <span className="block text-[#6C63FF]">remarkable together</span>
+              </h2>
+              <p className="text-[#9090A8] leading-relaxed mt-6">
+                Tell us about your project and our team will get back to you with a roadmap within 24 hours.
+              </p>
+            </div>
+
+            <RotatingBorderContainer>
+              <ContactForm />
+            </RotatingBorderContainer>
+          </div>
         </div>
       </section>
-
-      <Footer />
     </motion.div>
         ) : currentView === 'single-blog' ? (
-          <BlogPostView post={selectedBlogPost} onBack={() => setCurrentView('home')} />
+          <BlogPostView 
+            post={selectedBlogPost} 
+            onBack={() => setCurrentView('blog')} 
+            onHome={() => setCurrentView('home')} 
+          />
         ) : currentView === 'blog' ? (
           <motion.div key="blog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <BlogPage 
@@ -2023,6 +2546,16 @@ export default function App() {
               onOpenCase={handleOpenCase}
             />
           </motion.div>
+        ) : currentView === 'privacy' ? (
+          <PrivacyPolicyPage onBack={() => { setCurrentView('home'); window.scrollTo(0, 0); }} />
+        ) : currentView === 'terms' ? (
+          <TermsPage onBack={() => { setCurrentView('home'); window.scrollTo(0, 0); }} />
+        ) : ['ecommerce', 'webdesign', 'uiux', 'seo'].includes(currentView) ? (
+          <ExpertiseDetailPage 
+            type={currentView as any} 
+            onBack={() => { setCurrentView('home'); window.scrollTo(0, 0); }} 
+            onContactClick={() => { setCurrentView('contact'); window.scrollTo(0, 0); }}
+          />
         ) : (
           <motion.div key="detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <CaseStudyDetail 
@@ -2034,6 +2567,29 @@ export default function App() {
               }} 
             />
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <Footer onPageClick={(view) => { 
+        if (view === 'contact') {
+          if (currentView !== 'home') {
+            setCurrentView('home');
+            setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100);
+          } else {
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+          }
+          return;
+        }
+        setCurrentView(view); 
+        window.scrollTo(0, 0); 
+      }} />
+
+      <AnimatePresence>
+        {isConsultationModalOpen && (
+          <ConsultationModal 
+            isOpen={isConsultationModalOpen} 
+            onClose={() => setIsConsultationModalOpen(false)} 
+          />
         )}
       </AnimatePresence>
 

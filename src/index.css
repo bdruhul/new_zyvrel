@@ -3,12 +3,19 @@
 
 @theme {
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Clash Display", "DM Sans", sans-serif;
-}
+  --font-display: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  
+  @keyframes border-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 
-@font-face {
-  font-family: 'Clash Display';
-  src: url('https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap');
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  --animate-border-rotate: border-rotate 8s linear infinite;
+  --animate-shimmer: shimmer 1.5s infinite;
 }
 
 @layer base {
